@@ -69,5 +69,6 @@ that the collision is between two same-species atoms and directing the agent to 
 the endpoint-permutation check.
 
 ## Files
-`question.md` · `expert_answer.md` · `with_guardrails/{answer,transcript}.md` ·
+`question.md` · `expert_answer.md` · `precheck_report.txt` (the report that drove the
+flip) · `files/` (complete uploads; POTCAR n/a) · `with_guardrails/{answer,transcript}.md` ·
 `without_guardrails/{answer,transcript}.md`

@@ -1,0 +1,65 @@
+TRIVIAL PRECHECKS  root=files
+discovered: OUTCAR=7, INCAR=1, POSCAR=7, CONTCAR=5, KPOINTS=1, POTCAR=0
+(Findings are raw facts for the agent. A check reporting nothing or N/A is NOT a guarantee that dimension is fine.)
+
+== settings_consistency_endpoints_vs_band ==
+(status: basis=OUTCAR resolved block; compared 7 run(s) [u0/IMG_5/00, u0/IMG_5/01, u0/IMG_5/02, u0/IMG_5/03, u0/IMG_5/04, u0/IMG_5/05, u0/IMG_5/06]; tags compared = ISPIN,ICHARG,ENCUT,PREC,EDIFF,IALGO,ISYM,GGA_COMPAT,LMAXMIX,LREAL,LASPH,METAGGA,LNONCOLLINEAR,LSORBIT,ISMEAR,SIGMA,IVDW,LHFCALC,AEXX,HFSCREEN,NELECT,NUPDOWN,VOSKOWN,ENAUG,ADDGRID,LDAU,LDAUTYPE,LDAUL,LDAUU,LDAUJ,AMIX,AMIX_MAG (NOT exhaustive -- only these tags were diffed))
+ICHARG: u0/IMG_5/00=2 u0/IMG_5/01=0 u0/IMG_5/02=0 u0/IMG_5/03=0 u0/IMG_5/04=0 u0/IMG_5/05=0 u0/IMG_5/06=2
+NOTE for downstream agent: the XC functional (GGA / POTCAR LEXCH) is NOT diffed here -- a resolved 'GGA = --' means 'use the POTCAR default', which needs the POTCAR to resolve, so a string diff is unreliable. Verify yourself that the XC functional matches between endpoints and band.
+
+== vtst_linkage (raw fact) ==
+"VTST" startup banner across 7 OUTCAR(s):
+  FOUND  in: u0/IMG_5/01,u0/IMG_5/02,u0/IMG_5/03,u0/IMG_5/04,u0/IMG_5/05
+  ABSENT in: u0/IMG_5/00,u0/IMG_5/06
+VTST/NEB tags present in INCAR -- u0/IMG_5: IMAGES=5, SPRING=-5.0, LCLIMB=.FALSE., ICHAIN=0, IOPT=1
+
+== binary_version (raw fact) ==
+VASP build per OUTCAR:
+  u0/IMG_5/00: vasp.6.4.2  [complex]
+  u0/IMG_5/01: vasp.6.4.2  [complex]
+  u0/IMG_5/02: vasp.6.4.2  [complex]
+  u0/IMG_5/03: vasp.6.4.2  [complex]
+  u0/IMG_5/04: vasp.6.4.2  [complex]
+  u0/IMG_5/05: vasp.6.4.2  [complex]
+  u0/IMG_5/06: vasp.6.4.2  [complex]
+
+== ionic_convergence (raw fact) ==
+'reached required accuracy' (ionic convergence) per OUTCAR:
+  PRESENT in: u0/IMG_5/00,u0/IMG_5/06
+  ABSENT  in: u0/IMG_5/01,u0/IMG_5/02,u0/IMG_5/03,u0/IMG_5/04,u0/IMG_5/05
+
+== scf_convergence (raw fact) ==
+(no anomalies detected by this check)
+
+== incar_format_hygiene ==
+(no anomalies detected by this check)
+
+== ediffg_sign (raw fact) ==
+files/u0/IMG_5/INCAR: EDIFFG = -0.010 (negative/force-based)
+
+== notable_incar_flags (raw fact) ==
+(no anomalies detected by this check)
+
+== incar_list_lengths ==
+(no anomalies detected by this check)
+
+== poscar_format ==
+(no anomalies detected by this check)
+
+== interatomic_min_distance (raw fact) ==
+nearest-pair PBC min-image distance per structure (A); FLAG = a pair < 0.7 A apart (below any real bond = near-certain overlap). A LARGER distance being 'too close' is bond-dependent -- agent decides. '*' = cell too skewed for the bounded search (value is an UPPER bound). 'n/a' = structure not scanned (reason shown).
+  NEB band [u0/IMG_5] CONTCAR 01-05: 01:n/a-parse 02:n/a-parse 03:n/a-parse 04:n/a-parse 05:n/a-parse
+  NEB band [u0/IMG_5] POSCAR 00-06: 00:1.85 01:1.34 02:0.65 03:0.00 04:0.65 05:1.07 06:1.85  -> smallest 03=0.00A (median 1.07, ratio 0.00)  FLAG 02=0.65A <0.7 pair 17(Li)-151(F)  FLAG 03=0.00A <0.7 pair 127(F)-156(F)  FLAG 04=0.65A <0.7 pair 18(Li)-152(F)
+
+== neb_dir_layout ==
+[u0/IMG_5] IMAGES tag value(s)=['5']; image dirs present=[00,01,02,03,04,05,06] (count=7)
+
+== analysis_file_readability ==
+(no anomalies detected by this check)
+
+== atom_order_endpoints ==
+DIRECTIVE for downstream agent: element-block order/counts are the ONLY thing verified here. Per-atom correspondence within a block is NOT verified -- nebmake interpolates atom-i->atom-i by line order, so a permutation of same-species atoms between endpoints silently breaks the path. Confirm each atom's initial->final displacement is physically small/sensible.
+
+== selective_dynamics_endpoints ==
+(no anomalies detected by this check)
+

@@ -25,4 +25,4 @@ then grounded the ZVAL/NELECT reasoning in `docs/vasp/potcar.md` before writing.
 See `transcript.md` for the full reasoning and every tool call.
 
 ## Files
-`question.md` · `expert_answer.md` · `saddleagent_answer.md` · `transcript.md`
+`question.md` · `expert_answer.md` · `saddleagent_answer.md` · `transcript.md` · `precheck_report.txt` · `files/` (complete uploads; POTCAR excluded)

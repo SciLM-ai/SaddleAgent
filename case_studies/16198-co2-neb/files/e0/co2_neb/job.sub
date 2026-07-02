@@ -1,0 +1,13 @@
+#!/bin/bash
+#SBATCH --job-name=test
+##SBATCH --mail-user=henkelman@utexas.edu
+#SBATCH --nodes=16
+#SBATCH --exclusive
+##SBATCH --ntasks=192
+#SBATCH --ntasks=384
+##SBATCH --partition=amd # SLURM partition (amd or intel)
+##SBATCH --partition=intel # SLURM partition (amd or intel)
+##SBATCH --time=08:00:00
+#SBATCH --output=ll_out
+
+mpirun -np $SLURM_NTASKS vasp_std

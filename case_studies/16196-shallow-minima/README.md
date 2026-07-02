@@ -58,5 +58,7 @@ which is most valuable on cases where the bare agent would otherwise assert a wr
 from memory. This case did not happen to be one of those.
 
 ## Files
-`question.md` · `expert_answer.md` · `with_audit/{answer,transcript}.md` ·
-`without_audit/{answer,transcript}.md`
+`question.md` · `expert_answer.md` · `files/` (complete uploads; POTCAR n/a) ·
+`with_audit/{answer,transcript}.md` · `without_audit/{answer,transcript}.md` ·
+`precheck_report.txt` (shown for reference — this isolation ran with the **precheck
+off** in both arms, so this report was *not* injected in either run)

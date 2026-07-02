@@ -15,3 +15,7 @@ __pycache__/
 # User scratch
 /scratch/
 *.log
+
+# case_studies/ ships the real forum VASP files verbatim — never ignore them
+# (they include VASP .log outputs that the patterns above would otherwise catch).
+!case_studies/**

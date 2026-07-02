@@ -3,11 +3,20 @@
 These are real transition-state-search questions from the Henkelman Group's VASP/VTST
 support forum, run through SaddleAgent.
 
-**Showcase** cases hold `question.md`, `expert_answer.md`, `saddleagent_answer.md`, and
-`transcript.md` (the **full reasoning trace and every tool call**). **Ablation** cases
-instead hold two run subdirectories (each with its own `answer.md` + `transcript.md`)
-that toggle exactly one guardrail on versus off, so you can see what that guardrail
-changes.
+Every case directory holds:
+
+- `question.md` — the user's forum post (the problem, in their words)
+- `expert_answer.md` — the forum expert's actual reply (the ground truth)
+- `precheck_report.txt` — the deterministic precheck output on the user's files (the
+  raw facts the shipped agent gets injected up front)
+- `files/` — the **complete set of the user's uploaded VASP files** (INCAR, POSCAR,
+  OUTCAR, OSZICAR, KPOINTS, neb.dat, scripts, logs, …), except `POTCAR` (see below)
+- the agent's answer(s) and full transcript(s)
+
+**Showcase** cases add `saddleagent_answer.md` and `transcript.md` (the full reasoning
+trace and every tool call). **Ablation** cases instead add two run subdirectories (each
+with its own `answer.md` + `transcript.md`) that toggle exactly one guardrail on versus
+off, so you can see what that guardrail changes.
 
 ## The cases
 
@@ -46,10 +55,15 @@ Reproduce either ablation yourself with `saddleagent --no-precheck` and/or
 
 ## Provenance and data handling
 
-These questions were posted publicly on the Henkelman Group support forum; the
-group's PI, Graeme Henkelman, is a co-author of this project. To respect the
-posters and the VASP license, the **raw uploaded research files are not
-redistributed here** — only each user's public question, the expert's public
-answer, SaddleAgent's answer, and the agent's own reasoning/tool trace. The
-transcripts show which files the agent grepped and what it found, so the reasoning
-is fully auditable without republishing anyone's structures, energies, or POTCARs.
+These questions and their attachments were posted on the Henkelman Group support
+forum; the group's PI, Graeme Henkelman, is a co-author of this project, and the
+uploaded VASP files are included here under `files/` so each case is fully inspectable
+and reproducible.
+
+**One exception: `POTCAR` files are not included.** VASP pseudopotentials are licensed
+by VASP Software GmbH and may not be redistributed publicly — that is VASP's license,
+independent of who uploaded the file. Where a run used a POTCAR, a
+`POTCAR.EXCLUDED.txt` placeholder marks its location and explains how any VASP licensee
+regenerates it (concatenate the element POTCARs in POSCAR order). The agent only ever
+reads a POTCAR's `TITEL` / `ZVAL` metadata, which the OUTCARs also record, so nothing
+in the diagnoses depends on the omitted files.

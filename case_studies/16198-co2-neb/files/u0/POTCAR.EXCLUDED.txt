@@ -1,0 +1,8 @@
+This file is a VASP POTCAR placeholder.
+
+The original run included a POTCAR here, but VASP pseudopotential files are
+licensed by VASP Software GmbH and may not be redistributed publicly. It has been
+omitted from this repository. Any VASP licensee can regenerate the exact POTCAR by
+concatenating the pseudopotentials for the elements in the POSCAR, in POSCAR order
+(e.g. `cat <potpaw>/Li_sv/POTCAR <potpaw>/F/POTCAR > POTCAR`). The agent only ever
+reads a POTCAR's TITEL / ZVAL metadata, not its numerical grids.

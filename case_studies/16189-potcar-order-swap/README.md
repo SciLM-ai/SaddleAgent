@@ -34,4 +34,4 @@ cases (see 16186), not for every case.
 See `transcript.md` for the full reasoning and every tool call.
 
 ## Files
-`question.md` · `expert_answer.md` · `saddleagent_answer.md` · `transcript.md`
+`question.md` · `expert_answer.md` · `saddleagent_answer.md` · `transcript.md` · `precheck_report.txt` · `files/` (complete uploads; POTCAR excluded)

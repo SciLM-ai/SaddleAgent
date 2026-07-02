@@ -1,0 +1,38 @@
+! initialization
+System = Si
+ISTART = 1       ! new calculation
+ICHARG = 2
+
+! electronic optimization
+NELECT = 1080
+ISPIN = 2
+NELM = 20
+ENCUT = 400
+PREC = Accurate
+ISMEAR = 0; SIGMA = 0.01
+EDIFF = 1E-10
+NUPDOWN = 0
+
+! no ionic relaxation
+IBRION = 3      ! MD (no optimization from VASP code)
+NSW = 500
+POTIM = 0
+ISIF = 0
+IOPT = 3        ! QM optimizer
+MAXMOVE = 0.2   ! translation max step size
+TIMESTEP = 0.1  ! time step
+EDIFFG = -0.010
+
+! nudged elastic band
+ICHAIN = 0
+IMAGES = 3
+SPRING = -5.0
+LCLIMB = .FALSE.
+
+! HSE
+LSUBROT = .TRUE.
+LHFCALC = .TRUE.
+HFSCREEN = 0.20
+AEXX = 0.25
+PRECFOCK = Fast
+

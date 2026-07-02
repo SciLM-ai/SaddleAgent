@@ -1,0 +1,72 @@
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+ M_divide: can not subdivide           16 nodes by           5
+Abort(470417669) on node 31 (rank 31 in comm 0): Fatal error in PMPI_Topo_test: Invalid communicator, error stack:
+PMPI_Topo_test(116): MPI_Topo_test(MPI_COMM_NULL, topo_type=0x7fffffff4304) failed
+PMPI_Topo_test(69).: Null communicator
+Abort(470417669) on node 47 (rank 47 in comm 0): Fatal error in PMPI_Topo_test: Invalid communicator, error stack:
+PMPI_Topo_test(116): MPI_Topo_test(MPI_COMM_NULL, topo_type=0x7fffffff4304) failed
+PMPI_Topo_test(69).: Null communicator
+Abort(470417669) on node 63 (rank 63 in comm 0): Fatal error in PMPI_Topo_test: Invalid communicator, error stack:
+PMPI_Topo_test(116): MPI_Topo_test(MPI_COMM_NULL, topo_type=0x7fffffff4304) failed
+PMPI_Topo_test(69).: Null communicator

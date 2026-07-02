@@ -1,0 +1,49 @@
+TRIVIAL PRECHECKS  root=files
+discovered: OUTCAR=0, INCAR=0, POSCAR=0, CONTCAR=0, KPOINTS=0, POTCAR=0
+(Findings are raw facts for the agent. A check reporting nothing or N/A is NOT a guarantee that dimension is fine.)
+
+== settings_consistency_endpoints_vs_band ==
+(status: N/A: fewer than 2 comparable runs (need >=2 OUTCARs, or >=2 INCARs))
+
+== vtst_linkage (raw fact) ==
+N/A: no OUTCAR uploaded
+
+== binary_version (raw fact) ==
+N/A: no OUTCAR uploaded
+
+== ionic_convergence (raw fact) ==
+N/A: no OUTCAR uploaded
+
+== scf_convergence (raw fact) ==
+N/A: no OUTCAR uploaded
+
+== incar_format_hygiene ==
+N/A: no INCAR uploaded
+
+== ediffg_sign (raw fact) ==
+N/A: no INCAR uploaded
+
+== notable_incar_flags (raw fact) ==
+N/A: no INCAR uploaded
+
+== incar_list_lengths ==
+N/A: no INCAR uploaded
+
+== poscar_format ==
+N/A: no POSCAR uploaded
+
+== interatomic_min_distance (raw fact) ==
+N/A: no POSCAR/CONTCAR uploaded
+
+== neb_dir_layout ==
+N/A: no numbered image dirs (00,01,...) found
+
+== analysis_file_readability ==
+(no anomalies detected by this check)
+
+== atom_order_endpoints ==
+N/A: could not unambiguously identify two endpoint POSCARs
+
+== selective_dynamics_endpoints ==
+N/A: could not unambiguously identify two endpoint POSCARs
+

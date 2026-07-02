@@ -207,7 +207,8 @@ prechecks/
 examples/
   neb_images_mismatch/       a small illustrative CI-NEB case to try
 case_studies/                real Henkelman-forum cases, with full transcripts
-  <tid>-<slug>/              question, expert answer, agent answer, transcript
+  <tid>-<slug>/              question, expert answer, agent answer, transcript,
+                             precheck_report.txt, and files/ (the complete uploads)
 ```
 
 Run the precheck tests:

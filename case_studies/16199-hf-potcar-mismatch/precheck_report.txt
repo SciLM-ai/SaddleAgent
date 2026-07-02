@@ -1,0 +1,325 @@
+TRIVIAL PRECHECKS  root=files
+discovered: OUTCAR=6, INCAR=1, POSCAR=6, CONTCAR=4, KPOINTS=1, POTCAR=1
+(Findings are raw facts for the agent. A check reporting nothing or N/A is NOT a guarantee that dimension is fine.)
+
+== settings_consistency_endpoints_vs_band ==
+(status: basis=OUTCAR resolved block; compared 6 run(s) [u0/regular/00, u0/regular/01, u0/regular/02, u0/regular/03, u0/regular/04, u0/regular/05]; tags compared = ISPIN,ICHARG,ENCUT,PREC,EDIFF,IALGO,ISYM,GGA_COMPAT,LMAXMIX,LREAL,LASPH,METAGGA,LNONCOLLINEAR,LSORBIT,ISMEAR,SIGMA,IVDW,LHFCALC,AEXX,HFSCREEN,NELECT,NUPDOWN,VOSKOWN,ENAUG,ADDGRID,LDAU,LDAUTYPE,LDAUL,LDAUU,LDAUJ,AMIX,AMIX_MAG (NOT exhaustive -- only these tags were diffed))
+EDIFF: u0/regular/00=0.1E-08 u0/regular/01=0.1E-04 u0/regular/02=0.1E-04 u0/regular/03=0.1E-04 u0/regular/04=0.1E-04 u0/regular/05=0.1E-08
+ISYM: u0/regular/00=2 u0/regular/01=0 u0/regular/02=0 u0/regular/03=0 u0/regular/04=0 u0/regular/05=2
+NELECT: u0/regular/00=454.0000 u0/regular/01=518.0000 u0/regular/02=518.0000 u0/regular/03=518.0000 u0/regular/04=518.0000 u0/regular/05=454.0000
+NOTE for downstream agent: the XC functional (GGA / POTCAR LEXCH) is NOT diffed here -- a resolved 'GGA = --' means 'use the POTCAR default', which needs the POTCAR to resolve, so a string diff is unreliable. Verify yourself that the XC functional matches between endpoints and band.
+
+== vtst_linkage (raw fact) ==
+"VTST" startup banner across 6 OUTCAR(s):
+  FOUND  in: u0/regular/00,u0/regular/01,u0/regular/02,u0/regular/03,u0/regular/04,u0/regular/05
+  ABSENT in: (none)
+VTST/NEB tags present in INCAR -- u0/regular: IMAGES=4, SPRING=-5, LCLIMB=.FALSE., ICHAIN=0, IOPT=3
+
+== binary_version (raw fact) ==
+VASP build per OUTCAR:
+  u0/regular/00: vasp.5.4.4.18Apr17-6-g9f103f2a35  [complex]
+  u0/regular/01: vasp.5.4.4.18Apr17-6-g9f103f2a35  [complex]
+  u0/regular/02: vasp.5.4.4.18Apr17-6-g9f103f2a35  [complex]
+  u0/regular/03: vasp.5.4.4.18Apr17-6-g9f103f2a35  [complex]
+  u0/regular/04: vasp.5.4.4.18Apr17-6-g9f103f2a35  [complex]
+  u0/regular/05: vasp.5.4.4.18Apr17-6-g9f103f2a35  [complex]
+
+== ionic_convergence (raw fact) ==
+'reached required accuracy' (ionic convergence) per OUTCAR:
+  PRESENT in: u0/regular/00,u0/regular/05
+  ABSENT  in: u0/regular/01,u0/regular/02,u0/regular/03,u0/regular/04
+
+== scf_convergence (raw fact) ==
+(no anomalies detected by this check)
+
+== incar_format_hygiene ==
+(no anomalies detected by this check)
+
+== ediffg_sign (raw fact) ==
+files/u0/regular/INCAR: EDIFFG = -0.01 (negative/force-based)
+
+== notable_incar_flags (raw fact) ==
+(no anomalies detected by this check)
+
+== incar_list_lengths ==
+(no anomalies detected by this check)
+
+== poscar_format ==
+files/u0/regular/01/CONTCAR:76: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:77: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:78: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:79: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:80: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:81: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:82: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:83: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:84: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:85: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:86: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:87: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:88: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:89: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:90: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:91: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:92: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:93: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:94: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:95: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:96: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:97: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:98: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:99: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:100: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:101: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:102: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:103: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:104: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:105: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:106: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:107: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:108: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:109: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:110: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:111: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:112: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:113: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:114: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:115: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:116: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:117: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:118: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:119: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:120: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:121: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:122: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:123: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:124: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:125: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:126: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:127: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:128: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:129: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:130: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:131: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:132: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:133: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:134: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:135: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:136: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:137: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:138: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:139: NaN/Inf in trailing (velocity?) block
+files/u0/regular/01/CONTCAR:140: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:76: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:77: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:78: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:79: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:80: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:81: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:82: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:83: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:84: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:85: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:86: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:87: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:88: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:89: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:90: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:91: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:92: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:93: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:94: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:95: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:96: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:97: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:98: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:99: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:100: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:101: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:102: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:103: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:104: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:105: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:106: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:107: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:108: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:109: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:110: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:111: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:112: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:113: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:114: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:115: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:116: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:117: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:118: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:119: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:120: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:121: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:122: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:123: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:124: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:125: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:126: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:127: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:128: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:129: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:130: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:131: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:132: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:133: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:134: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:135: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:136: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:137: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:138: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:139: NaN/Inf in trailing (velocity?) block
+files/u0/regular/02/CONTCAR:140: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:76: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:77: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:78: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:79: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:80: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:81: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:82: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:83: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:84: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:85: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:86: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:87: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:88: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:89: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:90: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:91: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:92: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:93: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:94: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:95: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:96: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:97: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:98: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:99: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:100: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:101: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:102: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:103: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:104: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:105: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:106: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:107: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:108: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:109: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:110: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:111: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:112: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:113: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:114: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:115: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:116: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:117: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:118: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:119: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:120: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:121: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:122: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:123: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:124: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:125: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:126: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:127: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:128: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:129: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:130: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:131: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:132: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:133: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:134: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:135: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:136: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:137: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:138: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:139: NaN/Inf in trailing (velocity?) block
+files/u0/regular/03/CONTCAR:140: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:76: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:77: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:78: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:79: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:80: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:81: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:82: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:83: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:84: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:85: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:86: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:87: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:88: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:89: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:90: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:91: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:92: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:93: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:94: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:95: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:96: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:97: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:98: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:99: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:100: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:101: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:102: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:103: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:104: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:105: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:106: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:107: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:108: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:109: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:110: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:111: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:112: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:113: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:114: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:115: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:116: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:117: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:118: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:119: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:120: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:121: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:122: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:123: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:124: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:125: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:126: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:127: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:128: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:129: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:130: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:131: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:132: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:133: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:134: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:135: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:136: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:137: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:138: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:139: NaN/Inf in trailing (velocity?) block
+files/u0/regular/04/CONTCAR:140: NaN/Inf in trailing (velocity?) block
+
+== interatomic_min_distance (raw fact) ==
+nearest-pair PBC min-image distance per structure (A); FLAG = a pair < 0.7 A apart (below any real bond = near-certain overlap). A LARGER distance being 'too close' is bond-dependent -- agent decides. '*' = cell too skewed for the bounded search (value is an UPPER bound). 'n/a' = structure not scanned (reason shown).
+  NEB band [u0/regular] CONTCAR 01-04: 01:1.38 02:1.28 03:1.21 04:1.10  -> smallest 04=1.10A (median 1.28, ratio 0.86)
+  NEB band [u0/regular] POSCAR 00-05: 00:1.43 01:1.43 02:1.43 03:1.43 04:1.43 05:1.14  -> smallest 05=1.14A (median 1.43, ratio 0.80)
+
+== neb_dir_layout ==
+[u0/regular] IMAGES tag value(s)=['4']; image dirs present=[00,01,02,03,04,05] (count=6)
+
+== analysis_file_readability ==
+(no anomalies detected by this check)
+
+== atom_order_endpoints ==
+DIRECTIVE for downstream agent: element-block order/counts are the ONLY thing verified here. Per-atom correspondence within a block is NOT verified -- nebmake interpolates atom-i->atom-i by line order, so a permutation of same-species atoms between endpoints silently breaks the path. Confirm each atom's initial->final displacement is physically small/sensible.
+
+== selective_dynamics_endpoints ==
+(no anomalies detected by this check)
+

@@ -1,0 +1,52 @@
+SYSTEM = PBE-grap
+ 
+Starting parameters for this run:
+   NWRITE =      0    write-flag
+   ISTART =      0    job   : 0-new, 1-cont, 2-samecut
+   ICHARG =      2    charge: 0-wave, 1-file, 2-atom, >10-const
+   INIWAV =      1    electr: 0-lowe 1-rand  2-diag
+#   ISPIN  =      2    spin-polarized or not: 
+
+ 
+ Electronic Relaxation:
+   GGA    = PE
+   PREC   = Normal   low | medium | high
+   ENCUT  = 370
+   NELMDL =     -5    number of delayed ELM steps
+   NELMIN = 4
+   NELM   =    150    number of ELM steps
+   EDIFF  =  1E-05    energy stopping-criterion for ELM
+   LREAL  =  AUTO   real-space projection (.FALSE., .TRUE., On, Auto)
+   IALGO  =    38    algorithm (8=CG for small, 48=RMM for big systems)
+   LCHARG = .FALSE. 
+   LVTOT  = .FALSE. 
+   LWAVE  = .FALSE. 
+
+ Ionic Relaxation:
+   NSW    =   1000   max number of geometry steps
+   EDIFFG =   -0.026   force (eV/A) stopping-criterion for geometry steps
+   ISIF   =   2     (1:force=y stress=trace only ions=y shape=n volume=n)
+   ISYM   =   0     (1-use symmetry, 0-no symmetry)
+
+ DOS related values:
+   ISMEAR =     0    (-1-Fermi, 1-Methfessel/Paxton)
+   SIGMA  =     0.41   broadening in eV
+  
+ To use DFT-D2_Dispersion Correction in total energy:
+#   IVDW = 1
+
+  NEB related:
+   IOPT = 3
+   TIMESTEP = 0.05
+   ICHAIN  =  0     turn on NEB
+   LCLIMB = .TRUE.
+   POTIM = 0
+   IBRION = 3
+   IMAGES = 8      image number   
+   SPRING = -5     spring constant between images; negative turns on nudging
+
+Parallelization and R-Wigs flags:
+   LPLANE = .TRUE.
+   NPAR=4
+   KPAR=2
+

@@ -1,0 +1,28 @@
+! initialization
+System = Si
+ISTART = 0       ! new calculation
+ICHARG = 0
+NCORE = 8
+ISPIN = 2
+
+NELM = 20
+ENCUT = 400
+PREC = Accurate
+ISMEAR = 0; SIGMA = 0.01
+EDIFF = 1E-10
+ALGO = Normal
+
+! ionic relaxation
+NELECT = 1072 ! 1073 neutral
+IBRION = 3
+NSW = 500
+POTIM = 0
+ISIF = 0
+IOPT = 1
+EDIFFG = -0.010
+
+! NEB
+ICHAIN = 0
+IMAGES = 5
+SPRING = -5.0
+LCLIMB = .FALSE.

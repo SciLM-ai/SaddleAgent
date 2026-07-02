@@ -35,4 +35,4 @@ goals, but this is where the agent and the expert part ways.
 See `transcript.md` for the full reasoning and every tool call.
 
 ## Files
-`question.md` · `expert_answer.md` · `saddleagent_answer.md` · `transcript.md`
+`question.md` · `expert_answer.md` · `saddleagent_answer.md` · `transcript.md` · `precheck_report.txt` · `files/` (complete uploads; POTCAR excluded)
