@@ -1,5 +1,5 @@
 TRIVIAL PRECHECKS  root=files
-discovered: OUTCAR=16, INCAR=3, POSCAR=26, CONTCAR=20, KPOINTS=3, POTCAR=2
+discovered: OUTCAR=16, INCAR=3, POSCAR=26, CONTCAR=20, KPOINTS=3, POTCAR=0
 (Findings are raw facts for the agent. A check reporting nothing or N/A is NOT a guarantee that dimension is fine.)
 
 == settings_consistency_endpoints_vs_band ==
