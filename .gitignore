@@ -1,0 +1,17 @@
+# Generated per-run by ./saddleagent (absolute hook paths for THIS clone).
+# Copy settings.example.json -> settings.json if you want to run `claude`
+# manually inside agent/.
+agent/.claude/settings.json
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Editor / OS
+*.swp
+.DS_Store
+
+# User scratch
+/scratch/
+*.log

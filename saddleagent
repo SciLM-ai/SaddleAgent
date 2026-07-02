@@ -1,0 +1,347 @@
+#!/usr/bin/env python3
+"""SaddleAgent — a VASP / VTST transition-state-search debugging agent.
+
+Runs the Claude Code CLI headless (`claude -p`) inside a locked-down,
+inspect-only runtime that carries the **ts-debug** skill (the full TS-search
+debugging doctrine plus a bundled VASP/VTST/ASE reference library). Point it at
+a directory of your VASP files and describe the problem; it greps the files,
+consults the reference docs, and returns a specific diagnosis and fix — exact
+INCAR tags, file names, scripts, commands.
+
+Quickstart
+----------
+    ./saddleagent -d ./my_neb_run -q "CI-NEB stalls at 0.3 eV/A after 200 steps"
+    ./saddleagent -d ./my_run -f question.txt
+    echo "why won't this converge?" | ./saddleagent -d ./my_run
+    ./saddleagent -q "what INCAR tags select the dimer method?"   # no files
+
+Requirements
+------------
+  * The Claude Code CLI (`claude`) on your PATH, with an active Claude
+    subscription or API key. Install: https://docs.claude.com/en/docs/claude-code
+  * Python 3.8+ (standard library only).
+
+The model is swappable. SaddleAgent's whole point is that the skill carries the
+score, not the model: set SADDLEAGENT_MODEL to any model your `claude` CLI can
+reach (including a local open-weight build served through an Anthropic-compatible
+endpoint) and the same skill drives it. Defaults: claude-opus-4-8, effort xhigh.
+
+How it is sandboxed
+-------------------
+The agent runs with only Read/Grep/Glob/Bash, and five hooks enforce the box:
+  * deny_write     — no Edit/Write/NotebookEdit/MultiEdit (inspect-only)
+  * deny_unsafe    — Bash limited to a read-only allowlist (grep/cat/head/awk…)
+  * deny_webfetch  — no WebFetch (no network egress)
+  * deny_jail      — file access confined to your files dir + the runtime
+  * audit_stop     — a one-time self-audit gate before it finishes
+
+Nothing on your machine is modified; the agent only reads the files you point
+it at. See README.md for the full architecture.
+"""
+import argparse
+import json
+import os
+import subprocess
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+AGENT = os.path.join(HERE, "agent")                      # cwd for `claude -p`
+PRECHECK_PY = os.path.join(HERE, "prechecks", "precheck.py")
+INJECT = os.path.join(AGENT, "inject_system_prompt.md")
+
+MODEL = os.environ.get("SADDLEAGENT_MODEL", "claude-opus-4-8")
+EFFORT = os.environ.get("SADDLEAGENT_EFFORT", "xhigh")   # low|medium|high|xhigh|max
+ALLOWED_TOOLS = ["Read", "Grep", "Glob", "Bash"]         # no Write/Edit; Bash gated by hook
+MAX_TURNS = 40
+TIMEOUT = 900                                            # seconds (~5 min real run at xhigh)
+
+# ANSI (suppressed when stderr is not a tty)
+_TTY = sys.stderr.isatty()
+def _c(code, s):
+    return ("\033[%sm%s\033[0m" % (code, s)) if _TTY else s
+DIM, ORANGE, GREEN, RED, BOLD = "2", "38;5;166", "32", "31", "1"
+
+
+# --------------------------------------------------------------------------- #
+# runtime settings: assembled from THIS repo's layout so hook paths resolve no
+# matter where you cloned it. Regenerated each run (cheap, idempotent).
+# --------------------------------------------------------------------------- #
+def _ancestor_claudemd_excludes(runtime):
+    """Glob list blocking every ANCESTOR CLAUDE.md (+ local/rules) so only the
+    runtime's own CLAUDE.md loads — Claude Code's memory walk goes cwd -> /.
+    Starts from the runtime's PARENT so the runtime's own CLAUDE.md is kept."""
+    out, d = [], os.path.dirname(runtime)
+    while True:
+        out += [os.path.join(d, "CLAUDE.md"),
+                os.path.join(d, "CLAUDE.local.md"),
+                os.path.join(d, ".claude", "CLAUDE.md"),
+                os.path.join(d, ".claude", "rules", "**")]
+        parent = os.path.dirname(d)
+        if parent == d:
+            break
+        d = parent
+    return out
+
+
+def ensure_settings():
+    """Write agent/.claude/settings.json with absolute hook paths + dynamic
+    ancestor-CLAUDE.md exclusions. Mirrors the production runtime assembly."""
+    hooks = os.path.join(AGENT, ".claude", "hooks")
+    def h(name):
+        p = os.path.join(hooks, name)
+        if not os.path.exists(p):
+            sys.exit("missing hook: %s" % p)
+        os.chmod(p, 0o755)
+        return p
+    settings = {
+        "claudeMdExcludes": _ancestor_claudemd_excludes(AGENT),
+        "hooks": {
+            "PreToolUse": [
+                {"matcher": "Bash",
+                 "hooks": [{"type": "command", "command": h("deny_unsafe.py")}]},
+                {"matcher": "Edit|Write|NotebookEdit|MultiEdit",
+                 "hooks": [{"type": "command", "command": h("deny_write.py")}]},
+                {"matcher": "WebFetch",
+                 "hooks": [{"type": "command", "command": h("deny_webfetch.py")}]},
+                {"matcher": "Read|Grep|Glob|Bash",
+                 "hooks": [{"type": "command", "command": h("deny_jail.py")}]},
+            ],
+            "Stop": [{"hooks": [{"type": "command", "command": h("audit_stop.py")}]}],
+        },
+    }
+    dst = os.path.join(AGENT, ".claude", "settings.json")
+    with open(dst, "w") as f:
+        json.dump(settings, f, indent=2)
+
+
+# --------------------------------------------------------------------------- #
+# prechecks + prompt
+# --------------------------------------------------------------------------- #
+def precheck_report(files_dir):
+    """Deterministic trivial-precheck pass over the user's files -> raw report,
+    or '' on any error/timeout. Prechecks must NEVER block a run."""
+    if not (files_dir and os.path.exists(PRECHECK_PY)):
+        return ""
+    try:
+        r = subprocess.run([sys.executable, PRECHECK_PY, os.path.abspath(files_dir)],
+                           capture_output=True, text=True, timeout=60)
+        return r.stdout if r.returncode == 0 else ""
+    except (subprocess.TimeoutExpired, OSError):
+        return ""
+
+
+def build_prompt(question, files_dir, report):
+    parts = []
+    if files_dir:
+        parts.append("Your input/output files for this question are on disk under:\n"
+                     "  %s\nInspect them yourself with Read/Grep/Bash (grep/cat/tail) "
+                     "as your diagnosis needs — do not expect them pasted here."
+                     % os.path.abspath(files_dir))
+    else:
+        parts.append("No files were provided for this question. Answer from the "
+                     "question text and your own knowledge; if a specific file "
+                     "would settle it, say which one and ask for it.")
+    parts.append("\n=== USER QUESTION ===\n%s" % question.strip())
+    parts.append("\n=== TASK ===\nDiagnose the problem and give a specific, "
+                 "actionable answer.")
+    if report:
+        parts.append("\n=== PRECHECK REPORT (deterministic; raw facts, NOT "
+                     "conclusions -- verify against the files; an ABSENT/blank "
+                     "signal is itself a finding, never 'no information') ===\n"
+                     + report)
+    return "\n".join(parts)
+
+
+# --------------------------------------------------------------------------- #
+# live trace (stream-json -> compact tool one-liners on stderr)
+# --------------------------------------------------------------------------- #
+def _shorten(s, n=88):
+    s = " ".join(str(s).split())
+    return s if len(s) <= n else s[: n - 1] + "…"
+
+
+def _tool_line(name, inp):
+    inp = inp or {}
+    if name == "Bash":
+        return "Bash  %s" % _shorten(inp.get("command", ""))
+    if name == "Grep":
+        tgt = inp.get("path") or inp.get("glob") or ""
+        return "Grep  %s%s" % (_shorten(inp.get("pattern", ""), 48),
+                               ("  in %s" % _shorten(tgt, 32)) if tgt else "")
+    if name == "Read":
+        return "Read  %s" % _shorten(inp.get("file_path", ""), 72)
+    if name == "Glob":
+        return "Glob  %s" % _shorten(inp.get("pattern", ""), 72)
+    if name == "Skill":
+        return "Skill %s" % _shorten(inp.get("command") or inp.get("name") or "", 40)
+    return "%s  %s" % (name, _shorten(json.dumps(inp), 72))
+
+
+def stream(cmd, prompt, env, cwd, show_trace):
+    """Run `claude -p` streaming JSONL; live-trace tool calls on stderr, return
+    (answer, meta)."""
+    proc = subprocess.Popen(cmd, cwd=cwd, env=env, stdin=subprocess.PIPE,
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc.stdin.write(prompt)
+    proc.stdin.close()
+    answer, meta, ncalls = None, {}, 0
+    try:
+        for line in proc.stdout:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                ev = json.loads(line)
+            except ValueError:
+                continue
+            t = ev.get("type")
+            if t == "assistant":
+                for b in ev.get("message", {}).get("content", []):
+                    if b.get("type") == "tool_use":
+                        ncalls += 1
+                        if show_trace:
+                            sys.stderr.write("  " + _c(ORANGE, "→ ")
+                                             + _c(DIM, _tool_line(b.get("name", "?"),
+                                                                  b.get("input"))) + "\n")
+                            sys.stderr.flush()
+                    elif b.get("type") == "text" and show_trace:
+                        txt = (b.get("text") or "").strip()
+                        if txt:
+                            sys.stderr.write("  " + _c(DIM, _shorten(txt, 100)) + "\n")
+                            sys.stderr.flush()
+            elif t == "result":
+                answer = ev.get("result")
+                meta = {"cost_usd": ev.get("total_cost_usd"),
+                        "num_turns": ev.get("num_turns"),
+                        "duration_ms": ev.get("duration_ms"),
+                        "is_error": ev.get("is_error"), "tool_calls": ncalls}
+    finally:
+        err = proc.stderr.read()
+        rc = proc.wait()
+    if rc != 0:
+        raise RuntimeError("claude -p failed (rc=%d): %s"
+                           % (rc, (err or answer or "(no output)").strip()[:400]))
+    if answer is None:
+        raise RuntimeError("claude -p produced no result line: %s" % (err[-400:] or "(none)"))
+    return answer, meta
+
+
+# --------------------------------------------------------------------------- #
+def main():
+    ap = argparse.ArgumentParser(
+        prog="saddleagent",
+        description="Debug a VASP/VTST transition-state search with the ts-debug agent.",
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("-d", "--files", metavar="DIR",
+                    help="directory of your VASP input/output files (INCAR, OUTCAR, "
+                         "POSCAR, OSZICAR, neb.dat, DIMCAR, scripts, …)")
+    ap.add_argument("-q", "--question", metavar="TEXT", help="the question / problem")
+    ap.add_argument("-f", "--question-file", metavar="FILE",
+                    help="read the question from a file (use '-' for stdin)")
+    ap.add_argument("-o", "--output", metavar="FILE",
+                    help="write the answer here (default: stdout)")
+    ap.add_argument("--model", default=MODEL, help="base model (default: %s)" % MODEL)
+    ap.add_argument("--effort", default=EFFORT, help="reasoning effort (default: %s)" % EFFORT)
+    ap.add_argument("--max-turns", type=int, default=MAX_TURNS)
+    ap.add_argument("--timeout", type=int, default=TIMEOUT, help="seconds (default: %d)" % TIMEOUT)
+    ap.add_argument("--no-precheck", action="store_true", help="skip the deterministic prechecks")
+    ap.add_argument("--quiet", action="store_true", help="suppress the live tool trace")
+    args = ap.parse_args()
+
+    # ----- question (‑q, then ‑f/‑, then stdin) -----
+    if args.question:
+        question = args.question
+    elif args.question_file:
+        question = (sys.stdin.read() if args.question_file == "-"
+                    else open(args.question_file, encoding="utf-8").read())
+    elif not sys.stdin.isatty():
+        question = sys.stdin.read()
+    else:
+        ap.error("no question given (use -q TEXT, -f FILE, or pipe it on stdin)")
+    if not question.strip():
+        ap.error("the question is empty")
+
+    # ----- files dir -----
+    files_dir = None
+    if args.files:
+        files_dir = os.path.abspath(args.files)
+        if not os.path.isdir(files_dir):
+            ap.error("not a directory: %s" % args.files)
+        if not any(os.scandir(files_dir)):
+            sys.stderr.write(_c(RED, "warning: %s is empty; answering from the "
+                                     "question text alone\n") % files_dir)
+            files_dir = None
+
+    if not os.path.isdir(AGENT):
+        sys.exit("agent runtime not found at %s (is the repo intact?)" % AGENT)
+    if not _which("claude"):
+        sys.exit("the `claude` CLI was not found on PATH. Install Claude Code: "
+                 "https://docs.claude.com/en/docs/claude-code")
+
+    ensure_settings()
+
+    report = "" if args.no_precheck else precheck_report(files_dir)
+    prompt = build_prompt(question, files_dir, report)
+
+    cmd = ["claude", "-p",
+           "--model", args.model,
+           "--effort", args.effort,
+           "--allowedTools", *ALLOWED_TOOLS,
+           "--append-system-prompt-file", INJECT,
+           "--output-format", "stream-json",
+           "--verbose",
+           "--no-session-persistence",
+           "--max-turns", str(args.max_turns)]
+    if files_dir:
+        cmd[2:2] = ["--add-dir", files_dir]                # insert right after `-p`
+
+    # Isolate the agent's memory: block ancestor CLAUDE.md via settings.json, and
+    # Claude Code's per-project auto-memory via the env var. SADDLEAGENT_FILES_DIR
+    # tells deny_jail.py the one dir reads are confined to.
+    env = dict(os.environ, CLAUDE_CODE_DISABLE_AUTO_MEMORY="1",
+               SADDLEAGENT_FILES_DIR=(files_dir or ""))
+
+    show_trace = not args.quiet
+    if show_trace:
+        sys.stderr.write(_c(BOLD, "SaddleAgent") + _c(DIM, "  ts-debug · %s · effort %s%s\n"
+                         % (args.model, args.effort,
+                            ("  · %d files" % len(os.listdir(files_dir))) if files_dir else "  · no files")))
+        if report:
+            sys.stderr.write(_c(DIM, "  prechecks: %d lines injected\n"
+                             % len(report.splitlines())))
+        sys.stderr.write("\n")
+
+    try:
+        answer, meta = stream(cmd, prompt, env, AGENT, show_trace)
+    except subprocess.TimeoutExpired:
+        sys.exit(_c(RED, "timed out after %ds" % args.timeout))
+    except (RuntimeError, KeyboardInterrupt) as e:
+        sys.exit(_c(RED, "error: %s" % e))
+
+    answer = (answer or "").rstrip() + "\n"
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as f:
+            f.write(answer)
+        sys.stderr.write(_c(GREEN, "\nwrote %s\n" % args.output))
+    else:
+        if show_trace:
+            sys.stderr.write("\n" + _c(DIM, "─" * 60 + "\n"))
+        sys.stdout.write(answer)
+
+    if show_trace and meta:
+        c = meta.get("cost_usd")
+        sys.stderr.write("\n" + _c(DIM, "%d tool calls · %s turns%s\n" % (
+            meta.get("tool_calls") or 0, meta.get("num_turns") or "?",
+            ("" if c is None else " · ~$%.2f" % c))))
+
+
+def _which(prog):
+    for p in os.environ.get("PATH", "").split(os.pathsep):
+        cand = os.path.join(p, prog)
+        if os.path.isfile(cand) and os.access(cand, os.X_OK):
+            return cand
+    return None
+
+
+if __name__ == "__main__":
+    main()

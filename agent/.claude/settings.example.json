@@ -1,0 +1,29 @@
+{
+  "_comment": "Reference config for running `claude` MANUALLY inside agent/. The ./saddleagent runner generates its own settings.json with absolute hook paths and a dynamic claudeMdExcludes list, so you do NOT need this file to use the CLI. To drive the agent by hand: `cp settings.example.json settings.json` (from this dir), then `cd ..` and run claude with cwd=agent/. $CLAUDE_PROJECT_DIR is substituted by Claude Code to the launch directory.",
+  "claudeMdExcludes": [],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/deny_unsafe.py" }]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit|MultiEdit",
+        "hooks": [{ "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/deny_write.py" }]
+      },
+      {
+        "matcher": "WebFetch",
+        "hooks": [{ "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/deny_webfetch.py" }]
+      },
+      {
+        "matcher": "Read|Grep|Glob|Bash",
+        "hooks": [{ "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/deny_jail.py" }]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [{ "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/audit_stop.py" }]
+      }
+    ]
+  }
+}

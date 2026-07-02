@@ -1,0 +1,26 @@
+# CI-NEB: single-atom diffusion hop (toy 5-atom illustrative model)
+
+# electronic
+  ISTART = 0
+  ICHARG = 2
+  ENCUT  = 400
+  PREC   = Normal
+  EDIFF  = 1E-6
+  ISMEAR = 1
+  SIGMA  = 0.10
+  LREAL  = Auto
+  ALGO   = Fast
+  NELM   = 60
+
+# ionic / VTST force-based optimizer
+  IBRION = 3
+  POTIM  = 0
+  NSW    = 200
+  EDIFFG = -0.03
+
+# NEB (VTST tools)
+  IMAGES = 4
+  SPRING = -5.0
+  LCLIMB = .TRUE.
+  IOPT   = 1
+  ICHAIN = 0
