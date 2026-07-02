@@ -20,7 +20,7 @@ Launching skill: ts-debug
 
 **[2] Bash**
 ```
-command: ls -la ~/cseend_tacc_ai-agents/forum_extracted/review/review_site/files/16196/q0
+command: ls -la files
 description: List provided input files
 ```
 

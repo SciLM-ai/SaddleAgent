@@ -20,7 +20,7 @@ Launching skill: ts-debug
 
 **[2] Bash**
 ```
-command: ls -la ~/cseend_tacc_ai-agents/forum_extracted/review/review_site/files/16196/q0
+command: ls -la files
 description: List attached input files
 ```
 
@@ -36,7 +36,7 @@ drwxr-xr-x 7 graemeai henkelman 97 Jun 18 14:28 u0
 
 **[3] Bash**
 ```
-command: find ~/cseend_tacc_ai-agents/forum_extracted/review/review_site/files/16196/q0 -type f | head -200
+command: find files -type f | head -200
 description: List all attached files recursively
 ```
 

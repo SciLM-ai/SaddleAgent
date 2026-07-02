@@ -1,31 +1,36 @@
-**Root cause: the POTCAR in your NEB directory lists the two species in the opposite order from your POSCARs (and from your endpoint runs), so for the band images VASP put the F pseudopotential on the Li sublattice and Li_sv on the F sublattice.** VASP builds the POTCAR as one block per species *in the same order the species appear in the POSCAR*, and it matches those blocks to the POSCAR atom blocks positionally. Your POSCARs are all `Li F / 108 108` (Li block first), but the band's POTCAR is concatenated `F` then `Li_sv`. Because both blocks hold 108 atoms and the total electron count is unchanged (108·7 + 108·3 = 108·3 + 108·7 = 1080), VASP throws no error — it just silently computes a different, physically meaningless crystal whose absolute energy happens to land ~8–13 eV below your true endpoints.
+**Root cause: the POTCAR for the NEB band is concatenated in the wrong species order, so every interior image ran with Li and F pseudopotentials swapped.** Your endpoints use POTCAR order `Li_sv, F` — matching the POSCAR species line `Li F` (108 108) — but all seven interior images use `F, Li_sv`, reversed. VASP assigns POTCAR blocks to POSCAR blocks strictly by position, so in images 01–07 the 108 Li atoms were computed with the F potential and the 108 F atoms with the Li potential. That puts the whole band on a different total-energy reference (~8–11 eV below the correctly-set-up endpoints), which is precisely the "intermediates ~10 eV lower" you observe. Rebuild the band POTCAR in `Li_sv`-then-`F` order and rerun.
 
 ### Evidence
+From `grep TITEL */OUTCAR` alongside the final energies (`energy(sigma->0)`):
 
-The species-to-block mapping is printed in each OUTCAR and it flips between the two groups:
+| run | POTCAR order | VTST linked | E (eV) |
+|---|---|---|---|
+| OUTCAR00 (endpoint) | **Li_sv, F** ✓ | no | −1048.24 |
+| OUTCAR01–07 (band) | **F, Li_sv** ✗ | yes | −1056.68 … −1053.91 |
+| OUTCAR08 (endpoint) | **Li_sv, F** ✓ | no | −1043.41 |
 
-| | POTCAR order (TITEL) | Block-1 species (POMASS / ZVAL) | NBANDS | VTST banner |
-|---|---|---|---|---|
-| Endpoints `OUTCAR00`, `OUTCAR08` | Li_sv, F | Li (7.01 / 3.00) ✅ | 758 | absent (plain relaxations) |
-| Band `OUTCAR01–07` | **F, Li_sv** | **F (19.00 / 7.00)** ❌ | 757 | VTST 4.1 |
+The band 01→07 is a smooth, internally consistent curve with its maximum at image 05 — a Li↔F-swapped rocksalt lattice is still a perfect rocksalt lattice, so it relaxes cleanly and even yields a plausible-looking barrier. But there is an ~8 eV cliff from 00→01 and an ~11 eV cliff from 07→08, localized at *both* endpoints. The endpoints are the trustworthy calculations here; the band is the error. This matches the documented failure mode in `reference/neb-diagnostics.md` ("per-element pseudos concatenated in a different order… an ordering mismatch shifts the whole band ~10 eV") and the POTCAR rule in `docs/vasp/potcar.md` ("Order must match POSCAR").
 
-So in the band, block 1 — the 108 Li lattice sites — carries `POMASS=19.00, ZVAL=7.00` (fluorine), and the F sites carry Li_sv. Everything else you checked genuinely does match across all nine runs: ENCUT 400, single Γ-point, PBE (`LEXCH=PE`), `ISPIN=2`, 216 ions, `NELECT=1080`, cubic 12.079 Å cell, VASP 6.4.2. That is exactly why your consistency check passed — POTCAR *species order* is the one axis it didn't cover.
+Why your own consistency checks — and the automated precheck — saw nothing: Li_sv carries 3 valence electrons and F carries 7, so swapping them leaves NELECT at 1080 and ENCUT/PREC/ISMEAR/SIGMA/EDIFF all identical. The *only* fingerprint is the `TITEL` ordering.
 
-The energies confirm the swap rather than any real physics. `neb.dat`: endpoint 0 = 0.00, endpoint 8 = **+4.83 eV** — a sensible F Frenkel-pair formation energy — while interior images 1–7 sit at **−5.7 to −8.4 eV**. In absolute terms the interior images (−1053.9 to −1056.7 eV) fall *below the near-perfect endpoint* (−1048.24 eV). A defected, mid-migration configuration cannot be more stable than the intact crystal; an interior image below both endpoints is the diagnostic fingerprint of an endpoints↔band input mismatch, independent of how cleanly the band converged. VASP still located a maximum because forces still vary *within* this internally-consistent-but-wrong band.
+### Ruling out the binary as the cause
+One honest confound: the VTST banner is present in the band and absent in the endpoints, which correlates with the energy split just as well as the POTCAR order does. It is not the cause. All nine runs are the same build (`vasp.6.4.2`), and the VTST patch adds force projection and optimizers — it does not modify the DFT energy functional — so a same-version stock-vs-patched split is energy-neutral. The reversed POTCAR, by contrast, is an unambiguous input error that *must* shift the total energy by many eV. It is the sufficient and necessary cause; the binary split is incidental. The fix below eliminates both confounds at once by recomputing endpoints and band on one binary with one canonical POTCAR.
 
 ### Fix
+1. Rebuild a single canonical POTCAR in POSCAR order and use it for every directory:
+   ```
+   cat Li_sv/POTCAR F/POTCAR > POTCAR
+   ```
+2. The current image geometries relaxed on the wrong PES, so discard their CONTCARs. Re-interpolate fresh images from your two relaxed endpoints. For a point-defect hop use the IDPP builder (`nebmake.py`, `docs/vtst/scripts.md`) rather than linear interpolation, so the migrating F is not dragged straight through an occupied site:
+   ```
+   nebmake.py 00/CONTCAR 08/CONTCAR 7
+   ```
+   Then place the endpoint OUTCARs in `00/` and `08/` for post-processing, and rerun the whole band (endpoints included) on the VTST binary.
+3. Verify before trusting anything: `grep TITEL */OUTCAR` must read `Li_sv` first in *every* directory, and the new image energies must fall *between* the endpoints.
 
-1. Rebuild the NEB POTCAR in the **same order as the POSCAR** (Li first), the order your endpoints already used:
-   ```
-   cat <potpath>/Li_sv/POTCAR <potpath>/F/POTCAR > POTCAR
-   grep TITEL POTCAR      # must read Li_sv, then F
-   ```
-2. Don't reuse images 01–07 — they relaxed under the wrong forces. Regenerate the band from your relaxed endpoints and rerun (identical CLI for either script; `nebmake.py` additionally applies IDPP interpolation by default):
-   ```
-   nebmake.pl 00/POSCAR 08/POSCAR 7      # 7 = number of interior images
-   ```
-   Keep `00/` and `08/` as-is — those endpoints were computed with the correct ordering. Copy your endpoint INCAR verbatim and append only the NEB-control tags; don't post-hoc "correct" energies.
-3. Close the remaining consistency gap: your endpoints were run with a non-VTST build (`May 29 2025`) and the band with the VTST-patched build (`Jun 3 2025`). Both are VASP 6.4.2/PBE so this is secondary to the POTCAR swap, but for a clean energy scale run (or re-single-point) the endpoints with the same binary and confirm the two endpoint OUTCARs agree with each other on every DFT tag.
-4. Sanity check after the first ionic step: `grep 'POMASS\|ZVAL' OUTCAR01` should now read `7.01 19.00` / `3.00 7.00`, and every interior energy should fall **between** 0 and ~+4.8 eV, not below.
+### Secondary items to clean up
+- **Over-tight EDIFF.** You have `EDIFF = 1e-10` with `NELM = 20`, so SCF hits the 20-iteration cap before reaching 1e-10 and prints "EDIFF was not reached" on many steps (this is the flag the precheck raised for all nine runs). The residual there is sub-meV — it is an energy-resolution shortfall, not remotely a 10 eV effect, so it is not your problem here. Still, loosen EDIFF to ~1e-6 (or raise NELM to ~60) so each step fully converges cleanly.
+- **Endpoint gap.** After the fix, sanity-check the endpoint-to-endpoint energy, currently ~4.85 eV. That is large for a single F-interstitial hop; confirm both endpoints are the same defect and charge state and that each is a genuine relaxed minimum (both did reach the ionic force criterion, so this is a physics check, not a convergence one).
+- **NaN "velocity" blocks** in the image POSCARs are harmless leftovers from image generation; a geometry/NEB run does not read them and they cannot affect the energy. Ignore or strip them.
 
-**Confidence: very high** — the POMASS/ZVAL swap in the OUTCARs is direct proof and explains both the magnitude and the sign of the shift. Two notes on scope: the automated precheck reported "no files" only because yours are named non-standardly (`POSCARxx.vasp`, `OUTCARxx` under `u0/`), so its endpoint-vs-band consistency check never ran — it isn't a clean bill of health. And no INCAR was included; I didn't need it here (the band's VTST 4.1 banner confirms the NEB machinery ran), but if the corrected run misbehaves, send the INCAR and I'll check the IOPT/SPRING/EDIFFG/IMAGES deck. One thing to verify on your side: that the image POSCARs you actually submitted were Li-first (the copies on disk are) — if any dir paired an F-first POSCAR with the F-first POTCAR, the chemistry there would be right but its atom ordering would then mismatch the endpoints. Either way the cure is one consistent Li-then-F ordering across POTCAR, POSCAR, and both endpoints.
+**Confidence: very high.** The reversed `TITEL` order is an objective input error present in exactly the seven anomalous runs, and it fully and quantitatively explains the symptom.

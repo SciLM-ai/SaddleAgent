@@ -20,7 +20,7 @@ Launching skill: ts-debug
 
 **[2] Bash**
 ```
-command: cd ~/cseend_tacc_ai-agents/forum_extracted/review/review_site/files/16186/q0 && find . -type f | sort && echo "---TREE---" && ls -la u0/IMG_5/ 2>/dev/null
+command: cd files && find . -type f | sort && echo "---TREE---" && ls -la u0/IMG_5/ 2>/dev/null
 description: List all files in the question directory
 ```
 

@@ -34,4 +34,4 @@ cases (see 16186), not for every case.
 See `transcript.md` for the full reasoning and every tool call.
 
 ## Files
-`question.md` · `expert_answer.md` · `saddleagent_answer.md` · `transcript.md` · `precheck_report.txt` · `files/` (complete uploads; POTCAR excluded)
+`question.md` · `expert_answer.md` · `saddleagent_answer.md` · `transcript.md` · `precheck_report.txt` · `files/` (the complete upload — 9 OUTCARs + 9 POSCARs + neb.dat; no POTCAR or INCAR was uploaded)

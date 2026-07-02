@@ -20,7 +20,7 @@ Launching skill: ts-debug
 
 **[2] Bash**
 ```
-command: find ~/cseend_tacc_ai-agents/forum_extracted/review/review_site/files/16186/q0 -type f | head -200
+command: find files -type f | head -200
 description: List all files in the question directory
 ```
 
@@ -271,7 +271,7 @@ description: Confirm collisions are only in interpolated images, not relaxed end
 <details><summary>result (error)</summary>
 
 ```
-PreToolUse:Bash hook error: [agent/.claude/hooks/deny_jail.py]: Blocked: absolute path '/^' is outside your work area. You may ONLY read the CURRENT case's files. Work area: ~/cseend_tacc_ai-agents/forum_extracted/review/review_site/files/16186/q0 . Use absolute paths under that directory; '..', other directories, $HOME, and searches outside the work area are off-limits. If there are no files, answer from the question text and your own knowledge.
+PreToolUse:Bash hook error: [agent/.claude/hooks/deny_jail.py]: Blocked: absolute path '/^' is outside your work area. You may ONLY read the CURRENT case's files. Work area: files . Use absolute paths under that directory; '..', other directories, $HOME, and searches outside the work area are off-limits. If there are no files, answer from the question text and your own knowledge.
 ```
 </details>
 

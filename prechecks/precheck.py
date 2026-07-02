@@ -1086,15 +1086,34 @@ def _label(path, root):
     return rel
 
 
+# Canonical VASP file kinds. Users often upload non-canonical variants: numbered
+# flat files (OUTCAR00, POSCAR3) instead of the NN/OUTCAR layout, and structure
+# files with an extension (POSCAR01.vasp, CONTCAR.vasp). Recognize the canonical
+# stem plus an optional [._-]digits suffix and an optional structure extension, so
+# a flat band like OUTCAR00..OUTCAR08 is not silently seen as "no OUTCAR uploaded".
+_KINDS = ("OUTCAR", "CONTCAR", "POSCAR", "INCAR", "KPOINTS", "POTCAR")
+_KIND_RE = {k: re.compile(k + r"(?:[._-]?\d+)?(?:\.(?:vasp|VASP|dat|out|txt))?\Z")
+            for k in _KINDS}
+
+
+def _file_kind(fname):
+    """Classify a filename as a VASP file kind, tolerating numbered/suffixed
+    variants (OUTCAR00, POSCAR01.vasp, CONTCAR.vasp); None if it matches none.
+    Stems are distinct prefixes, so match order does not matter."""
+    for k in _KINDS:
+        if _KIND_RE[k].match(fname):
+            return k
+    return None
+
+
 def discover(root):
     found = {"OUTCAR": [], "INCAR": [], "POSCAR": [], "CONTCAR": [],
              "KPOINTS": [], "POTCAR": []}
     for dirpath, _dn, files in os.walk(root):
         for f in files:
-            if f in found:
-                found[f].append(os.path.join(dirpath, f))
-            elif re.fullmatch(r"POSCAR\d+", f):
-                found["POSCAR"].append(os.path.join(dirpath, f))
+            k = _file_kind(f)
+            if k:
+                found[k].append(os.path.join(dirpath, f))
     return found
 
 
