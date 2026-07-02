@@ -83,9 +83,12 @@ def _ancestor_claudemd_excludes(runtime):
     return out
 
 
-def ensure_settings():
+def ensure_settings(audit=True):
     """Write agent/.claude/settings.json with absolute hook paths + dynamic
-    ancestor-CLAUDE.md exclusions. Mirrors the production runtime assembly."""
+    ancestor-CLAUDE.md exclusions. Mirrors the production runtime assembly.
+
+    ``audit=False`` drops the Stop-hook self-audit gate (for the ``--no-audit``
+    ablation). The inspect-only / dir-jail safety hooks are always present."""
     hooks = os.path.join(AGENT, ".claude", "hooks")
     def h(name):
         p = os.path.join(hooks, name)
@@ -106,9 +109,11 @@ def ensure_settings():
                 {"matcher": "Read|Grep|Glob|Bash",
                  "hooks": [{"type": "command", "command": h("deny_jail.py")}]},
             ],
-            "Stop": [{"hooks": [{"type": "command", "command": h("audit_stop.py")}]}],
         },
     }
+    if audit:
+        settings["hooks"]["Stop"] = [
+            {"hooks": [{"type": "command", "command": h("audit_stop.py")}]}]
     dst = os.path.join(AGENT, ".claude", "settings.json")
     with open(dst, "w") as f:
         json.dump(settings, f, indent=2)
@@ -177,9 +182,20 @@ def _tool_line(name, inp):
     return "%s  %s" % (name, _shorten(json.dumps(inp), 72))
 
 
-def stream(cmd, prompt, env, cwd, show_trace):
-    """Run `claude -p` streaming JSONL; live-trace tool calls on stderr, return
-    (answer, meta)."""
+def _result_text(block):
+    """Flatten a tool_result content block (str or list of {text}) to text."""
+    c = block.get("content")
+    if isinstance(c, str):
+        return c
+    if isinstance(c, list):
+        return "\n".join(p.get("text", "") for p in c if isinstance(p, dict))
+    return ""
+
+
+def stream(cmd, prompt, env, cwd, show_trace, transcript=None):
+    """Run `claude -p` streaming JSONL; live-trace tool calls on stderr. If
+    ``transcript`` is a list, append every reasoning step, tool call (full
+    input), and tool result (in order) to it. Return (answer, meta)."""
     proc = subprocess.Popen(cmd, cwd=cwd, env=env, stdin=subprocess.PIPE,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     proc.stdin.write(prompt)
@@ -199,16 +215,27 @@ def stream(cmd, prompt, env, cwd, show_trace):
                 for b in ev.get("message", {}).get("content", []):
                     if b.get("type") == "tool_use":
                         ncalls += 1
+                        if transcript is not None:
+                            transcript.append({"kind": "tool", "name": b.get("name", "?"),
+                                               "input": b.get("input") or {}})
                         if show_trace:
                             sys.stderr.write("  " + _c(ORANGE, "→ ")
                                              + _c(DIM, _tool_line(b.get("name", "?"),
                                                                   b.get("input"))) + "\n")
                             sys.stderr.flush()
-                    elif b.get("type") == "text" and show_trace:
+                    elif b.get("type") == "text":
                         txt = (b.get("text") or "").strip()
-                        if txt:
+                        if txt and transcript is not None:
+                            transcript.append({"kind": "text", "text": txt})
+                        if txt and show_trace:
                             sys.stderr.write("  " + _c(DIM, _shorten(txt, 100)) + "\n")
                             sys.stderr.flush()
+            elif t == "user" and transcript is not None:
+                for b in ev.get("message", {}).get("content", []):
+                    if b.get("type") == "tool_result":
+                        transcript.append({"kind": "result",
+                                           "text": _result_text(b),
+                                           "is_error": bool(b.get("is_error"))})
             elif t == "result":
                 answer = ev.get("result")
                 meta = {"cost_usd": ev.get("total_cost_usd"),
@@ -224,6 +251,35 @@ def stream(cmd, prompt, env, cwd, show_trace):
     if answer is None:
         raise RuntimeError("claude -p produced no result line: %s" % (err[-400:] or "(none)"))
     return answer, meta
+
+
+def render_transcript(events, header, answer, result_cap=1200):
+    """Render the captured event stream to readable markdown (full reasoning +
+    every tool call and a capped view of each result)."""
+    out = [header, ""]
+    n = 0
+    for e in events:
+        if e["kind"] == "text":
+            out.append(e["text"]); out.append("")
+        elif e["kind"] == "tool":
+            n += 1
+            inp = e["input"]
+            if len(inp) == 1 and "command" in inp:
+                body = inp["command"]
+            else:
+                body = "\n".join("%s: %s" % (k, v) for k, v in inp.items())
+            out.append("**[%d] %s**" % (n, e["name"]))
+            out.append("```\n%s\n```" % body)
+        elif e["kind"] == "result":
+            r = (e["text"] or "").rstrip()
+            if len(r) > result_cap:
+                r = r[:result_cap] + "\n… (%d more chars)" % (len(r) - result_cap)
+            tag = " (error)" if e.get("is_error") else ""
+            out.append("<details><summary>result%s</summary>\n\n```\n%s\n```\n</details>"
+                       % (tag, r or "(empty)"))
+        out.append("")
+    out += ["", "---", "", "## Final answer", "", (answer or "").rstrip(), ""]
+    return "\n".join(out)
 
 
 # --------------------------------------------------------------------------- #
@@ -245,6 +301,10 @@ def main():
     ap.add_argument("--max-turns", type=int, default=MAX_TURNS)
     ap.add_argument("--timeout", type=int, default=TIMEOUT, help="seconds (default: %d)" % TIMEOUT)
     ap.add_argument("--no-precheck", action="store_true", help="skip the deterministic prechecks")
+    ap.add_argument("--no-audit", action="store_true",
+                    help="disable the Stop-hook self-audit gate (ablation)")
+    ap.add_argument("--save-transcript", metavar="FILE",
+                    help="write the full reasoning + every tool call and result to FILE (markdown)")
     ap.add_argument("--quiet", action="store_true", help="suppress the live tool trace")
     args = ap.parse_args()
 
@@ -278,7 +338,7 @@ def main():
         sys.exit("the `claude` CLI was not found on PATH. Install Claude Code: "
                  "https://docs.claude.com/en/docs/claude-code")
 
-    ensure_settings()
+    ensure_settings(audit=not args.no_audit)
 
     report = "" if args.no_precheck else precheck_report(files_dir)
     prompt = build_prompt(question, files_dir, report)
@@ -309,14 +369,33 @@ def main():
         if report:
             sys.stderr.write(_c(DIM, "  prechecks: %d lines injected\n"
                              % len(report.splitlines())))
+        gr = []
+        if args.no_precheck:
+            gr.append("no precheck")
+        if args.no_audit:
+            gr.append("no Stop-hook audit")
+        if gr:
+            sys.stderr.write(_c(RED, "  ablation: %s\n" % ", ".join(gr)))
         sys.stderr.write("\n")
 
+    events = [] if args.save_transcript else None
     try:
-        answer, meta = stream(cmd, prompt, env, AGENT, show_trace)
+        answer, meta = stream(cmd, prompt, env, AGENT, show_trace, transcript=events)
     except subprocess.TimeoutExpired:
         sys.exit(_c(RED, "timed out after %ds" % args.timeout))
     except (RuntimeError, KeyboardInterrupt) as e:
         sys.exit(_c(RED, "error: %s" % e))
+
+    if args.save_transcript:
+        guard = ("precheck=%s, stop-audit=%s"
+                 % ("off" if args.no_precheck else "on",
+                    "off" if args.no_audit else "on"))
+        hdr = ("# SaddleAgent transcript\n\nmodel: `%s` · effort: `%s` · guardrails: %s"
+               " · %d precheck lines\n" % (args.model, args.effort, guard,
+                                           len(report.splitlines()) if report else 0))
+        with open(args.save_transcript, "w", encoding="utf-8") as f:
+            f.write(render_transcript(events, hdr, answer))
+        sys.stderr.write(_c(GREEN, "\nwrote transcript %s\n" % args.save_transcript))
 
     answer = (answer or "").rstrip() + "\n"
     if args.output:

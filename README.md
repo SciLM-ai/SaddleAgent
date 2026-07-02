@@ -173,6 +173,23 @@ when that guidance is buried deepest.
 
 ---
 
+## Real forum case studies
+
+`case_studies/` holds real questions from the Henkelman Group support forum, each
+with the user's question, the forum expert's actual answer (ground truth),
+SaddleAgent's answer, and the **full reasoning trace plus every tool call** the
+agent made. They are recorded transcripts, not re-runnable here (the posters'
+raw research files are not redistributed; see `case_studies/README.md`).
+
+Two of them are **guardrail ablations** that toggle one deterministic guardrail
+on versus off. The charged-defect NEB (topic 16186) isolates the **precheck**:
+the user blamed `NELECT`, and both runs get past that to find atoms colliding,
+but only with the precheck does the agent reach the right fix (reorder the
+mis-ordered endpoints, as the forum expert gave) instead of a plausible-but-wrong
+one. The shallow-minima case (topic 16196) isolates the **Stop-hook audit** and
+is an honest null result: the audit makes the answer doc-grounded and
+appropriately hedged, but does not flip the diagnosis. We include it as-is.
+
 ## Repository layout
 
 ```
@@ -189,6 +206,8 @@ prechecks/
   test_precheck.py           its test suite (pytest)
 examples/
   neb_images_mismatch/       a small illustrative CI-NEB case to try
+case_studies/                real Henkelman-forum cases, with full transcripts
+  <tid>-<slug>/              question, expert answer, agent answer, transcript
 ```
 
 Run the precheck tests:
