@@ -1,0 +1,10 @@
+#!/bin/bash
+#PBS -N 20
+#PBS -q gentai 
+#PBS -l nodes=node01:ppn=20
+#PBS -j oe
+cd $PBS_O_WORKDIR
+source /etc/profile
+source /opt/impi/5.0.1.035/bin64/mpivars.sh
+mpirun -np 20 vasp_std
+

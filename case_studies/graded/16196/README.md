@@ -1,6 +1,6 @@
 # Topic 16196 — Poor convergence near shallow energy minima
 
-Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, and the true expert answer.
+Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, the true expert answer, and the user's files.
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
@@ -8,6 +8,10 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 ## Graeme's grader note
 
 > This is a good answer.
+
+## Files
+
+The user's complete uploaded files for this topic are in the deep-dive case: [`../../16196-shallow-minima/files/`](../../16196-shallow-minima/files/).
 
 ## Original question
 

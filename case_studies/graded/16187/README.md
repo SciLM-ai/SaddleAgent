@@ -1,6 +1,6 @@
 # Topic 16187 — Re: Shape of MEP curve
 
-Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, and the true expert answer.
+Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, the true expert answer, and the user's files.
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
@@ -8,6 +8,10 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 ## Graeme's grader note
 
 > AI gets this completely wrong.  The problem with the calculation is that the VTSTcode is not linked into the vasp binary and so when the VTSTscripts grep for NEB forces (which the VTSTcode prints), it does not find them and defaults to zero.  That is the real reason why the spline has a zero slope at each image.
+
+## Files
+
+`files/` — the complete upload (50 files; `POTCAR` excepted, for licensing).
 
 ## Original question
 

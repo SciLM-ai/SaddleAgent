@@ -1,0 +1,31 @@
+System = neb_test
+
+NWRITE = 1     ! print flag
+LWAVE  = .F.   !  write WAVECAR
+LCHARG = .F.   !  write CHGCAR
+
+ISYM = 0
+
+# Electronic relaxation
+ALGO = Fast
+ISMEAR = 0
+SIGMA = 0.05
+ENCUT  = 400   ! sets energy cutoff that defines basis set
+EDIFF = 1.0E-6
+NELM   = 100    ! maximum number of SCF cycles
+NELMIN = 8
+
+# Ionic relaxation
+NSW    = 500    ! # of steps in optimization (default 0)
+EDIFFG = -0.1
+IBRION = 3
+POTIM = 0
+
+# NEB
+ICHAIN = 0
+IMAGES = 5
+SPRING = -5
+LCLIMB = .TRUE.
+
+# Optimizer
+IOPT = 3

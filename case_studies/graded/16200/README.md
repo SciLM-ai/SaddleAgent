@@ -1,6 +1,6 @@
 # Topic 16200 — Neb under external stress
 
-Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, and the true expert answer.
+Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, the true expert answer, and the user's files.
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
@@ -8,6 +8,10 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 ## Graeme's grader note
 
 > wow, just wow.  AI can sound so confident and be really stupid.  There is no averaging of the stress in a vasp calculation, unless you have some ISIF setting that relaxes the volume with the ratio of cell vectors constrained.  Also, the question is asking about a lateral stress, not a normal stress.  The AI is correct this can be done with ASE, but if the AI could learn from my answer, there is a variable in VTST which allows for the application of an external pressure.  And again, doubling down on the problem of a normal stress in the AI explanation does not make any sense when the stress can be input as a matrix.  Again, it is unfortunate that the AI sounds very confident while at the same time getting fundamental concepts wrong.
+
+## Files
+
+No files were uploaded on this forum topic (text-only question).
 
 ## Original question
 

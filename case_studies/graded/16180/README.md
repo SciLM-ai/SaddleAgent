@@ -1,6 +1,6 @@
 # Topic 16180 — Inquiry Regarding High Energy Barrier in CI-NEB Calculation
 
-Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, and the true expert answer.
+Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, the true expert answer, and the user's files.
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
@@ -8,6 +8,10 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 ## Graeme's grader note
 
 > AI is completely wrong; the initial and final structures are different and do represent Li diffusion.  The problem is that the settings for the band calculations are different from those of the endpoints.
+
+## Files
+
+`files/` — the complete upload (63 files; `POTCAR` excepted, for licensing).
 
 ## Original question
 

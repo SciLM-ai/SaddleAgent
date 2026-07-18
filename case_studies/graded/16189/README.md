@@ -1,6 +1,6 @@
 # Topic 16189 — Negative transition state energies along reaction coordinates
 
-Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, and the true expert answer.
+Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, the true expert answer, and the user's files.
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
@@ -8,6 +8,10 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 ## Graeme's grader note
 
 > The AI response is correct.
+
+## Files
+
+The user's complete uploaded files for this topic are in the deep-dive case: [`../../16189-potcar-order-swap/files/`](../../16189-potcar-order-swap/files/).
 
 ## Original question
 

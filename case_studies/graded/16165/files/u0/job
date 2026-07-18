@@ -1,0 +1,41 @@
+#!/bin/bash
+
+#SBATCH -n 36
+#SBATCH -J VASP_test
+#SBATCH --exclusive
+#SBATCH -o vasp.out.%J
+#SBATCH -e vasp.err.%J
+#SBATCH --wckey XFS45001
+#SBATCH -p debug 
+#SBATCH -t 00:05:00
+#SBATCH -N 1
+
+ml purge
+ml intel-compilers/2023.2.1 impi/2021.10.0 VASP/6.4.2-VTST-198-VASPsol-20170729
+
+drct=$(pwd)
+
+export EXE=${EBROOTVASP}/bin/vasp_std
+
+export INPUTDIR=$SLURM_SUBMIT_DIR
+export workdir=$GPFS/$SLURM_JOBID
+
+echo $INPUTDIR
+echo $workdir
+
+mkdir $workdir
+
+cp $INPUTDIR/{INCAR,POSCAR,KPOINTS,POTCAR} $workdir
+cd $workdir
+
+mpirun -n 36 $EXE
+#mpirun --mca pml cm --mca mtl ofi --mca mtl_ofi_provider_include psm2 -n 36 $EXE
+#mpirun --mca btl '^openib' --mca pml ucx -n 36 $EXE
+#srun --mpi=pmix -n 36 $EXE
+
+cp {OUTCAR,CONTCAR,OSZICAR} $drct
+
+#cp -r /ifpengpfs/scratch/ifpen/corralvm/$SLURM_JOBID $drct/.
+cp /ifpengpfs/scratch/ifpen/corralvm/OUTPUT/vasp.out.$SLURM_JOBID $drct
+cp /ifpengpfs/scratch/ifpen/corralvm/OUTPUT/vasp.err.$SLURM_JOBID $drct
+

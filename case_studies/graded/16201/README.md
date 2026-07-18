@@ -1,6 +1,6 @@
 # Topic 16201 — CI-NEB image asymmetry in vacancy migration in W
 
-Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, and the true expert answer.
+Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, the true expert answer, and the user's files.
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
@@ -8,6 +8,10 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 ## Graeme's grader note
 
 > The AI is generally correct, but it is always annoying when it gets some statement fundamentally wrong, such as comparing an energy difference to a force criterion (EDIFFG = -0.03).  You can't compare numbers with different units.  So while this is basically correct, having a statement which is complete nonsense in there makes it look a little like AI slop.  (sorry AI)
+
+## Files
+
+No files were uploaded on this forum topic (text-only question).
 
 ## Original question
 

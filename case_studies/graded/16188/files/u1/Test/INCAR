@@ -1,0 +1,28 @@
+SYSTEM = TS  
+PREC = Normal               
+ENCUT = 500                   
+EDIFF = 1E-7            
+ISMEAR = 0                    
+SIGMA = 0.01                                   
+ISIF = 2 
+ISYM = 0                    
+
+# NEB PARAMETERS
+ ICHAIN = 0 
+ LCLIMB = .TRUE.
+ SPRING = -5
+ IMAGES = 2
+
+# OPTIMIZER PARAMETERS
+ IBRION = 3 
+ POTIM = 0 
+ IOPT = 3 
+ EDIFFG = -0.01  #
+ NSW = 400 
+ 
+LASPH = .TRUE.
+LCHARG = .FALSE.
+LWAVE = .FALSE.
+LREAL = Auto
+NCORE = 4 
+KPAR=1  

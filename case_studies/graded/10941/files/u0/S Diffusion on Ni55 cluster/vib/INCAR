@@ -1,0 +1,32 @@
+System = TS_Vibrational_Calculation
+
+ NWRITE = 1 ! verbosity of output
+ LWAVE =  .FALSE.  ! write WAVECAR?
+ LCHARG = .FALSE.   ! write CHGCAR?
+ LVTOT =  .FALSE.  ! write LOCPOT?
+
+Electronic relaxation
+ ALGO   = Fast
+ ENCUT  = 400
+ ISMEAR = 0     ! 0: Gaussian, electron smearing
+ SIGMA  = 0.100
+ PREC   = normal
+ LREAL  = auto
+ ROPT   = 2e-4 2e-4    ! one_number_for_each_species, four items here mean there are four element species in the system
+ ISTART = 2
+ ICHARGE = 0
+ NELM   = 100
+ NELMDL = -8
+ EDIFF  = 1e-6
+ ISPIN  = 2     ! polarization?
+
+Ionic relaxation
+ NSW    = 1     ! # of steps in optimization (default 0!)
+ ISIF   = 2     ! 0: relax ions, 1,2:relax ions,calc stresses, 3:relax ion+cell
+ IBRION = 5     ! optimization algorithm 1: quasi-NR, 2:CG algorithm for ions, 5:allow to determine the Hessian matrix (matrix of the second derivatives of the energy with respect to the atomic positions) and the vibrational frequencies of a system. 
+ NFREE  = 2    ! # of displacements to make
+ ISYM   = 0    ! keep all kpts for displaced geometry
+ POTIM  = 0.025   ! displacement step size
+ EDIFFG = 1e-4
+
+#NPAR=8

@@ -1,6 +1,6 @@
 # Topic 15608 — ZPE corrected Energy barrier calculations
 
-Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, and the true expert answer.
+Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, the true expert answer, and the user's files.
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
@@ -8,6 +8,10 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 ## Graeme's grader note
 
 > AI is going crazy here.  It is true that there will never precisely be a zero mode, but near zero modes are not appropriate for the harmonic approximation to zero point energy.  Small negative modes will make the script give an error.  The problem is really one of physics and not computer science, and the AI missed it completely.
+
+## Files
+
+No files were uploaded on this forum topic (text-only question).
 
 ## Original question
 

@@ -1,0 +1,26 @@
+#!/bin/bash
+set -x
+
+#BSUB -J sny
+#BSUB -o %J.out
+#BSUB -e %J.err
+#BSUB -n 120
+#BSUB -R "span[ptile=24]"
+
+#module load vasp
+#module load mpich
+module load intelmpi
+
+cd $LS_SUBCWD 
+
+VASP=/hpc/software/vasp_intel/bin/vasp_std
+MACHFILE=mpi_machines.${LSB_JOBID}
+
+echo "${LSB_HOSTS}" | tr '\/ ' '\r\n' > ${MACHFILE}
+
+MPIEXEC=`which mpirun`
+echo $MPIEXEC
+ulimit -l unlimited
+
+$MPIEXEC -machinefile ${MACHFILE} -genvall -bootstrap  ssh $VASP 
+

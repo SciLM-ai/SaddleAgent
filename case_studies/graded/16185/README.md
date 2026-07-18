@@ -1,6 +1,6 @@
 # Topic 16185 — NEB: force dissociation
 
-Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, and the true expert answer.
+Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, the true expert answer, and the user's files.
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
@@ -8,6 +8,10 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 ## Graeme's grader note
 
 > Here I think the AI did a better job than the expert.  I don't see the files, but I see in the question that the user is suggesting to remove species from one side of an NEB, which does not work, as the AI points out.  The expert interpreted this as asking about a band where a ligand was spatially 'removed' from the metal, but upon a second reading, I think the AI is correct in assuming that the user is actually suggesting to remove the ligand, which will not work for an NEB calculation.  Good job AI!
+
+## Files
+
+No files were uploaded on this forum topic (text-only question).
 
 ## Original question
 

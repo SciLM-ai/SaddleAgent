@@ -1,0 +1,23 @@
+System = single
+
+NWRITE = 1     ! print flag
+LWAVE  =      .F.  !  write WAVECAR
+LCHARG =      .F.  !  write CHGCAR
+LVTOT  =      .F.  !  write LOCPOT, local potential
+
+Electronic relaxation
+ALGO  = fast   ! sets SCF algorithm.  fast: combo approach
+ISMEAR = 0     ! sets how orbitals are occupied. 0: Gaussian smearing, 1: M-P -5: tetrahedron
+SIGMA  = 0.1  ! smearing paramater
+PREC   = normal  ! Precision parameter, typically "normal" or "accurate"
+ENCUT  = 400   ! sets energy cutoff that defines basis set
+ISTART = 0     ! start orbital calculation from scratch
+EDIFF  = 1e-6  ! electronic convergence
+ISPIN  = 2     ! spin polarization? 1 = no, 2 = yes
+LREAL  = auto  ! how to numerically handle core potentials.  .F.: recip  auto: real space
+NELM   = 100    ! maximum number of SCF cycles
+
+Ionic relaxation
+NSW    = 0    ! # of steps in optimization (default 0!)
+SYMPREC=1E-6
+

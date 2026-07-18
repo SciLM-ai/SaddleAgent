@@ -1,0 +1,28 @@
+System = 1x1_001_aAl2O3
+
+NWRITE = 1     ! print flag
+LWAVE  =      .F.  !  write WAVECAR
+LCHARG =      .F.  !  write CHGCAR
+LVTOT  =      .F.  !  write LOCPOT, local potential
+
+Electronic relaxation
+ALGO  = fast   ! sets SCF algorithm.  fast: combo approach
+ISMEAR = 0     ! sets how orbitals are occupied. 0: Gaussian smearing, 1: M-P -5: tetrahedron
+SIGMA  = 0.1  ! smearing paramater
+PREC   = normal  ! Precision parameter, typically "normal" or "accurate"
+ENCUT  = 400   ! sets energy cutoff that defines basis set
+ISTART = 0     ! start orbital calculation from scratch
+EDIFF  = 1e-6  ! electronic convergence
+ISPIN  = 2     ! spin polarization? 1 = no, 2 = yes
+LREAL  = auto  ! how to numerically handle core potentials.  .F.: recip  auto: real space
+NELM   = 100    ! maximum number of SCF cycles
+
+Ionic relaxation
+NSW    = 100    ! # of steps in optimization (default 0!)
+ISIF   = 0     ! 0: relax ions, 1,2:relax ions,calc stresses, 3:relax ion+cell
+IBRION = 2     ! optimization algorithm 1: quasi-NR, 2:CG algorithm for ions
+NFREE  = 5    ! number of DIIS vectors to save.  Don't make bigger than 3n -6 or than about 10!
+POTIM  = 0.2   ! trial step in optimization
+EDIFFG  = -0.03 ! convergence criterion, eV/Ang. Geometric convergence parameter
+SYMPREC=1E-6
+

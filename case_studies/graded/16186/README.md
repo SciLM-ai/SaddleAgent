@@ -1,6 +1,6 @@
 # Topic 16186 — NEB with charged defect using vtstcode-205
 
-Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, and the true expert answer.
+Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, the true expert answer, and the user's files.
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
@@ -8,6 +8,10 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 ## Graeme's grader note
 
 > The AI is correct and actually noted problems that the expert did not see in terms of electronic convergence.  That said, the real problem with the NEB calculations is a mis-ordering of atoms between the initial and final states so that atoms are too close in the intermediate images.  These are somewhat orthogonal problems; there has to be electronic structure convergence, which the AI describes, but the initial band also has to make sense; it does not and the AI failed to notice that serious problem.
+
+## Files
+
+The user's complete uploaded files for this topic are in the deep-dive case: [`../../16186-charged-defect-neb/files/`](../../16186-charged-defect-neb/files/).
 
 ## Original question
 

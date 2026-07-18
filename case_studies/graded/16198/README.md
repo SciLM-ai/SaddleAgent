@@ -1,6 +1,6 @@
 # Topic 16198 — CO2 gas formation NEB does not converge well
 
-Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, and the true expert answer.
+Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAgent's answer to this question and left a grader note. This example pairs that note with the exact answer it grades, the original question, the true expert answer, and the user's files.
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
@@ -8,6 +8,10 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 ## Graeme's grader note
 
 > There are some accurate statements from the AI, but as usual, when there are inaccurate statements, it makes the entire response seem sketchy.  So yes, resolution is a problem, and in my response I just went to 8 images and got nice convergence.  This business about breaking up the band is not a terrible idea, but it is also not the key problem.  Again, I relaxed the full band with 8 images.  Sure, there may be an intermediate minimum, but that is not a serious problem.  Also, I firmly reject the notion (which I have heard many times) that users should to NEB before CI-NEB.  If your 'clever' AI brain can show me an example, I would be eager to see it.  I could cook up a pathological case, but my advice is always to use climbing image from the start; an NEB pre-relax only wastes computer time.
+
+## Files
+
+The user's complete uploaded files for this topic are in the deep-dive case: [`../../16198-co2-neb/files/`](../../16198-co2-neb/files/).
 
 ## Original question
 

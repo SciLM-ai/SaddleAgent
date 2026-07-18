@@ -1,0 +1,1 @@
+VASP POTCAR placeholder. The original run had a POTCAR here; VASP pseudopotentials are licensed by VASP Software GmbH and may not be redistributed, so it is omitted. A licensee regenerates it by concatenating the element POTCARs in POSCAR order. The agent reads only TITEL/ZVAL metadata (also in the OUTCARs).
