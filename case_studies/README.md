@@ -1,9 +1,18 @@
 # Case studies — real Henkelman-forum questions
 
 These are real transition-state-search questions from the Henkelman Group's VASP/VTST
-support forum, run through SaddleAgent.
+support forum, run through SaddleAgent. There are two collections:
 
-Every case directory holds:
+1. **Five deep-dive cases** (below) — full precheck report, complete uploaded files, and
+   the entire reasoning/tool transcript, including two controlled guardrail ablations.
+2. **[`graded/`](graded/) — 32 expert-graded answers** — where Graeme Henkelman (the
+   forum expert and the project's human grader) reviewed SaddleAgent's answer and left a
+   verbatim note. Each holds the original question, the true expert answer, the exact AI
+   answer graded, and Graeme's note (right, wrong, and one "AI beat the expert").
+
+## Deep-dive cases
+
+Every deep-dive case directory holds:
 
 - `question.md` — the user's forum post (the problem, in their words)
 - `expert_answer.md` — the forum expert's actual reply (the ground truth)

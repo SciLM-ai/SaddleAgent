@@ -175,20 +175,27 @@ when that guidance is buried deepest.
 
 ## Real forum case studies
 
-`case_studies/` holds real questions from the Henkelman Group support forum, each
-with the user's question, the forum expert's actual answer (ground truth),
-SaddleAgent's answer, and the **full reasoning trace plus every tool call** the
-agent made. They are recorded transcripts, not re-runnable here (the posters'
-raw research files are not redistributed; see `case_studies/README.md`).
+`case_studies/` holds real questions from the Henkelman Group support forum. It has
+two collections:
 
-Two of them are **guardrail ablations** that toggle one deterministic guardrail
-on versus off. The charged-defect NEB (topic 16186) isolates the **precheck**:
-the user blamed `NELECT`, and both runs get past that to find atoms colliding,
-but only with the precheck does the agent reach the right fix (reorder the
-mis-ordered endpoints, as the forum expert gave) instead of a plausible-but-wrong
-one. The shallow-minima case (topic 16196) isolates the **Stop-hook audit** and
-is an honest null result: the audit makes the answer doc-grounded and
-appropriately hedged, but does not flip the diagnosis. We include it as-is.
+- **Five deep-dive cases**, each with the user's question, the forum expert's actual
+  answer (ground truth), SaddleAgent's answer, the **full reasoning trace plus every
+  tool call**, the deterministic **precheck report**, and the **complete uploaded VASP
+  files** (`POTCAR` excepted, for licensing). Two are **guardrail ablations** that
+  toggle one guardrail on versus off: the charged-defect NEB (topic 16186) isolates the
+  **precheck** — the user blamed `NELECT`, both runs find atoms colliding, but only with
+  the precheck does the agent reach the expert's fix (reorder the mis-ordered endpoints)
+  instead of a plausible-but-wrong one; the shallow-minima case (topic 16196) isolates
+  the **Stop-hook audit** and is an honest null (it disciplines the answer but does not
+  flip the diagnosis).
+- **[`case_studies/graded/`](case_studies/graded/) — 32 expert-graded answers**, where
+  Graeme Henkelman (the forum expert and the project's human grader) reviewed
+  SaddleAgent's answer and left a verbatim note. Each pairs the original question, the
+  true expert answer, the exact graded AI answer, and Graeme's note — unfiltered, so it
+  includes the wins, the misses ("AI is completely wrong"), and one where the AI beat the
+  expert.
+
+See `case_studies/README.md` for the index.
 
 ## Repository layout
 
@@ -206,9 +213,11 @@ prechecks/
   test_precheck.py           its test suite (pytest)
 examples/
   neb_images_mismatch/       a small illustrative CI-NEB case to try
-case_studies/                real Henkelman-forum cases, with full transcripts
-  <tid>-<slug>/              question, expert answer, agent answer, transcript,
-                             precheck_report.txt, and files/ (the complete uploads)
+case_studies/                real Henkelman-forum cases
+  <tid>-<slug>/              deep dive: question, expert answer, agent answer,
+                             transcript, precheck_report.txt, files/ (complete uploads)
+  graded/<tid>/              32 expert-graded answers: question, expert answer,
+                             the graded AI answer, and Graeme's grader note
 ```
 
 Run the precheck tests:
