@@ -191,9 +191,9 @@ two collections:
 - **[`case_studies/graded/`](case_studies/graded/) — 32 expert-graded answers**, where
   Graeme Henkelman (the forum expert and the project's human grader) reviewed
   SaddleAgent's answer and left a verbatim note. Each pairs the original question, the
-  true expert answer, the exact graded AI answer, and Graeme's note — unfiltered, so it
-  includes the wins, the misses ("AI is completely wrong"), and one where the AI beat the
-  expert.
+  true expert answer, the exact graded AI answer with its full run trace (thinking +
+  every tool call), and Graeme's note — unfiltered, so it includes the wins, the misses
+  ("AI is completely wrong"), and one where the AI beat the expert.
 
 See `case_studies/README.md` for the index.
 

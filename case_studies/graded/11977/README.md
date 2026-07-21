@@ -4,6 +4,7 @@ Graeme Henkelman (the expert who answered the original thread) reviewed SaddleAg
 
 - **Graded answer:** `SaddleAgent (with Opus 4.8)`  ·  generated 2026-06-17
 - **Grader:** Graeme Henkelman
+- **Trace:** [`trace.md`](trace.md) — the graded run's step-by-step thinking and full tool-call log
 
 ## Graeme's grader note
 

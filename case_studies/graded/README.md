@@ -1,6 +1,6 @@
 # Expert-graded AI answers
 
-Graeme Henkelman — the Henkelman Group expert who answered these threads and the human grader for this project — reviewed SaddleAgent's answers and left notes. Each folder below contains the **original question**, the **true expert answer**, the user's uploaded **files** (where any were attached; `POTCAR` excepted), the exact **AI answer** that was graded, and **Graeme's grader note** on it. The notes are verbatim and unfiltered: right, wrong, and one where Graeme judged the AI better than the original expert reply.
+Graeme Henkelman — the Henkelman Group expert who answered these threads and the human grader for this project — reviewed SaddleAgent's answers and left notes. Each folder below contains the **original question**, the **true expert answer**, the user's uploaded **files** (where any were attached; `POTCAR` excepted), the exact **AI answer** that was graded, its **full run trace** (`trace.md`: the agent's step-by-step thinking, every tool call in order, and the skill/docs files it opened), and **Graeme's grader note** on it. The notes are verbatim and unfiltered: right, wrong, and one where Graeme judged the AI better than the original expert reply.
 
 32 graded examples. The grade is on the specific stored answer Graeme reviewed (`SaddleAgent (with Opus 4.8)`); five topics (16186, 16189, 16196, 16198, 16199) also have a full [deep-dive case](../) with files and transcripts.
 
